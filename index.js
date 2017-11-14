@@ -22,12 +22,33 @@ const usernames = {};
 const messages  = [];
 const rooms = [{
 
-              room: 'Jazz',
+              room: 'Classic Rock',
               users: [],
               messages:[]
             },
             {
               room: 'Blues',
+              users: [],
+              messages: []
+            },
+            {
+              room: 'Metal',
+              users: [],
+              messages: []
+
+            },
+            {
+              room: 'Jazz',
+              users: [],
+              messages: []
+            },
+            {
+              room: 'Funk',
+              users: [],
+              messages: []
+            },
+            {
+              room: 'Classical',
               users: [],
               messages: []
             }]
@@ -47,6 +68,8 @@ io.sockets.on('connect', (socket)=>{
 
 	socket.on('addUser', (username)=>{
 		console.log(username,'this is username')
+
+		io.sockets.emit('rooms', rooms)
 	})
 
 
