@@ -62,12 +62,23 @@ const rooms = [{
 
 
 io.sockets.on('connect', (socket)=>{
-	console.log('connected Music_Server')
-	socket.emit('message', 'I am the socket from the server')
+	
+		console.log('connected Music_Server')
+		socket.emit('message', 'I am the socket from the server')
 
 
-	socket.on('addUser', (username)=>{
-		console.log(username,'this is username')
+		socket.on('addUser', (username)=>{
+			console.log(username,'this is username')
+
+		usernames[username] = socket.id;
+	    socket.username = username;
+	    socket.currentRoom = rooms[0].room;
+	//this is putting the user into the room
+	    rooms[0].users.push(username)
+	//tell the socket to join that room
+	    socket.join(rooms[0].room)
+
+	    io.sockets.emit('users', rooms[0].users, rooms[0].room);
 
 		io.sockets.emit('rooms', rooms)
 	})
