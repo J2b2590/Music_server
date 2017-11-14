@@ -18,6 +18,20 @@ server.listen(port)
 
 app.set('view engine', 'ejs');
 
+const usernames = {};
+const messages  = [];
+const rooms = [{
+
+              room: 'Jazz',
+              users: [],
+              messages:[]
+            },
+            {
+              room: 'Blues',
+              users: [],
+              messages: []
+            }]
+
 
 
 
@@ -27,7 +41,14 @@ app.set('view engine', 'ejs');
 
 
 io.sockets.on('connect', (socket)=>{
-	console.log('connected')
-	socket.emit('message', 'I am the socket')
+	console.log('connected Music_Server')
+	socket.emit('message', 'I am the socket from the server')
+
+
+	socket.on('addUser', (username)=>{
+		console.log(username,'this is username')
+	})
+
+
 	
 })
