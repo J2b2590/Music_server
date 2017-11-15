@@ -9,80 +9,77 @@ const server = http.createServer(app)
 const io = require('socket.io').listen(server)
 server.listen(port)
 
+const users = []
+const rooms = [
+  {
 
+    room: 'Classic Rock',
+    messages:[]
+  },
+  {
+    room: 'Blues',
+    messages: []
+  },
+  {
+    room: 'Metal',
+    messages: []
 
-
-
-
-
-
-app.set('view engine', 'ejs');
-
-const usernames = {};
-const messages  = [];
-const rooms = [{
-
-              room: 'Classic Rock',
-              users: [],
-              messages:[]
-            },
-            {
-              room: 'Blues',
-              users: [],
-              messages: []
-            },
-            {
-              room: 'Metal',
-              users: [],
-              messages: []
-
-            },
-            {
-              room: 'Jazz',
-              users: [],
-              messages: []
-            },
-            {
-              room: 'Funk',
-              users: [],
-              messages: []
-            },
-            {
-              room: 'Classical',
-              users: [],
-              messages: []
-            }]
-
-
-
-
-
-
-
+  },
+  {
+    room: 'Jazz',
+    messages: []
+  },
+  {
+    room: 'Funk',
+    messages: []
+  },
+  {
+    room: 'Classical',
+    messages: []
+  }
+]
 
 
 io.sockets.on('connect', (socket)=>{
-	
 		console.log('connected Music_Server')
 		socket.emit('message', 'I am the socket from the server')
 
+		socket.on('addUser', (username, room)=>{
+      let user;
+      users.forEach((u) => {
+        if (u.username == username){
+          user = u
+        }
+      })
+      if (!user){
+        users.push({
+          username: username
+        })        
+      }
+  		io.sockets.emit('rooms', rooms)
+  	})
 
-		socket.on('addUser', (username)=>{
-			console.log(username,'this is username')
+    socket.on('joinRoom', (username, room) => {
+      console.log('joined the room', username, room)
+      const usersInRoom = [];
+      let currentRoom
+      users.forEach((user)=>{
+        if(user.username == username){
+          user.currentRoom = room.room
+        }
+        if(user.currentRoom == room.room){
+          usersInRoom.push(user)
+        }
+      })
+      rooms.forEach((r)=>{
+        if(r.room == room.room  ){
+            currentRoom = r
+        }
+      })
 
-		usernames[username] = socket.id;
-	    socket.username = username;
-	    socket.currentRoom = rooms[0].room;
-	//this is putting the user into the room
-	    rooms[0].users.push(username)
-	//tell the socket to join that room
-	    socket.join(rooms[0].room)
+      socket.emit('users', users)
+      socket.emit('messages', currentRoom.messages)
 
-	    io.sockets.emit('users', rooms[0].users, rooms[0].room);
-
-		io.sockets.emit('rooms', rooms)
-	})
-
-
+    })
 	
 })
