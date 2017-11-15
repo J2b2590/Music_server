@@ -76,7 +76,7 @@ io.sockets.on('connect', (socket)=>{
         }
       })
 
-      socket.emit('users', users)
+      socket.emit('users', usersInRoom)
       socket.emit('messages', currentRoom.messages)
 
     })
