@@ -46,14 +46,6 @@ io.sockets.on('connect', (socket)=>{
 		console.log('connected Music_Server')
 		socket.emit('message', 'I am the socket from the server')
 
-
-
-
-
-
-		console.log('connected Music_Server')
-		socket.emit('message', 'I am the socket from the server')
-
 		socket.on('addUser', (username, room)=>{
       let user;
       users.forEach((u) => {
