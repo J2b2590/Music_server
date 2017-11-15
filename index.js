@@ -55,9 +55,12 @@ io.sockets.on('connect', (socket)=>{
       })
       if (!user){
         users.push({
+
+
           username: username
         })        
       }
+
   		io.sockets.emit('rooms', rooms)
   	})
 
@@ -78,7 +81,7 @@ io.sockets.on('connect', (socket)=>{
         }
       })
 
-      socket.emit('users', usersInRoom)
+      io.sockets.emit('users', usersInRoom)
       socket.emit('messages', currentRoom.messages)
 
     })
@@ -87,7 +90,7 @@ io.sockets.on('connect', (socket)=>{
       rooms.forEach((r)=>{
         if(room.room == r.room){
           r.messages.push(message)
-          socket.emit('messages', r.messages)
+          io.sockets.emit('messages', r.messages)
         }
       })
     })
