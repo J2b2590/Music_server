@@ -60,7 +60,6 @@ io.sockets.on('connect', (socket)=>{
   	})
 
     socket.on('joinRoom', (username, room) => {
-      console.log('joined the room', username, room)
       const usersInRoom = [];
       let currentRoom
       users.forEach((user)=>{
@@ -80,6 +79,15 @@ io.sockets.on('connect', (socket)=>{
       socket.emit('users', users)
       socket.emit('messages', currentRoom.messages)
 
+    })
+
+    socket.on('addMessage',(message, room)=>{
+      rooms.forEach((r)=>{
+        if(room.room == r.room){
+          r.messages.push(message)
+          socket.emit('messages', r.messages)
+        }
+      })
     })
 	
 })
