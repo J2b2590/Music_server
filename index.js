@@ -46,14 +46,6 @@ io.sockets.on('connect', (socket)=>{
 		console.log('connected Music_Server')
 		socket.emit('message', 'I am the socket from the server')
 
-
-
-
-
-
-		console.log('connected Music_Server')
-		socket.emit('message', 'I am the socket from the server')
-
 		socket.on('addUser', (username, room)=>{
       let user;
       users.forEach((u) => {
@@ -63,9 +55,12 @@ io.sockets.on('connect', (socket)=>{
       })
       if (!user){
         users.push({
+
+
           username: username
         })        
       }
+
   		io.sockets.emit('rooms', rooms)
   	})
 
@@ -86,7 +81,7 @@ io.sockets.on('connect', (socket)=>{
         }
       })
 
-      socket.emit('users', usersInRoom)
+      io.sockets.emit('users', usersInRoom)
       socket.emit('messages', currentRoom.messages)
 
     })
@@ -95,7 +90,7 @@ io.sockets.on('connect', (socket)=>{
       rooms.forEach((r)=>{
         if(room.room == r.room){
           r.messages.push(message)
-          socket.emit('messages', r.messages)
+          io.sockets.emit('messages', r.messages)
         }
       })
     })
