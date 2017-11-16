@@ -13,7 +13,7 @@ const users = []
 const rooms = [
   {
 
-    room: 'Classic Rock',
+    room: 'Rock',
     messages:[]
   },
   {
