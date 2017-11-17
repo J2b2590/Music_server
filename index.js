@@ -9,12 +9,12 @@ const server = http.createServer(app)
 const io = require('socket.io').listen(server)
 server.listen(port)
 
-const users = []
+
+const users = [] // { username: 'Bob123', currentRoom: "Metal"}
 const rooms = [
   {
-
     room: 'Rock',
-    messages:[]
+    messages:[] // {username: 'Bob123', text: 'My Thing'}
   },
   {
     room: 'Blues',
@@ -48,12 +48,12 @@ io.sockets.on('connect', (socket)=>{
 
 		socket.on('addUser', (username, room)=>{
       let user;
-      users.forEach((u) => {
-        if (u.username == username){
-          user = u
+      users.forEach((u) => { //u = one user
+        if (u.username == username){//going over all the usernames to see if it exists
+          user = u // i found the user by username and going to toss in the "bucket"
         }
       })
-      if (!user){
+      if (!user){ 
         users.push({
 
 
@@ -61,28 +61,20 @@ io.sockets.on('connect', (socket)=>{
         })        
       }
 
-  		io.sockets.emit('rooms', rooms)
+  		io.sockets.emit('rooms', rooms)// client sees all of the rooms
   	})
-
-    socket.on('joinRoom', (username, room) => {
-      const usersInRoom = [];
+//
+    socket.on('joinRoom', (username, genre) => {
       let currentRoom
       users.forEach((user)=>{
+        // updating the room the user is in
         if(user.username == username){
-          user.currentRoom = room.room
-        }
-        if(user.currentRoom == room.room){
-          usersInRoom.push(user)
-        }
-      })
-      rooms.forEach((r)=>{
-        if(r.room == room.room  ){
-            currentRoom = r
+          user.currentRoom = genre.room
         }
       })
 
-      io.sockets.emit('users', usersInRoom)
-      socket.emit('messages', currentRoom.messages)
+      io.sockets.emit('users', users)
+      socket.emit('rooms', rooms)
 
     })
 
@@ -90,7 +82,7 @@ io.sockets.on('connect', (socket)=>{
       rooms.forEach((r)=>{
         if(room.room == r.room){
           r.messages.push(message)
-          io.sockets.emit('messages', r.messages)
+          io.sockets.emit('rooms', rooms)
         }
       })
     })
