@@ -1,12 +1,15 @@
 const express = require('express');
 const app = express();
 const http = require('http');
+var allowedOrigins = "https://stormy-gorge-77177.herokuapp.com/:*";
+
+
 
 const port = process.env.PORT || 8080;
 app.set('port', port)
 
 const server = http.createServer(app)
-const io = require('socket.io').listen(server)
+const io = require('socket.io').listen(server, {origins:allowedOrigins})
 server.listen(port)
 
 
