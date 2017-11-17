@@ -1,32 +1,27 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-var allowedOrigins = "https://stormy-gorge-77177.herokuapp.com/:*";
+const cors = require('cors')
+const allowedOrigins = "https://stormy-gorge-77177.herokuapp.com/:*";
 
+app.use(cors())
+
+
+var corsOptions = {
+  origin: 'https://stormy-gorge-77177.herokuapp.com/',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
 
 
 const port = process.env.PORT || 8080;
 app.set('port', port)
 
 const server = http.createServer(app)
-const io = require('socket.io').listen(server, {origins: allowedOrigins})
+const io = require('socket.io')({
+  transports  : [ 'websocket' ]
+}).listen(server, {origins: allowedOrigins})
 server.listen(port)
 
-io.configure('production', function(){
-    console.log("Server in production mode");
-    io.enable('browser client minification');  // send minified client
-    io.enable('browser client etag'); // apply etag caching logic based on version number
-    io.enable('browser client gzip'); // the file
-    io.set('log level', 1);           // logging
-    io.set('transports', [            // all transports (optional if you want flashsocket)
-        'websocket'
-        , 'flashsocket'
-        , 'htmlfile'
-        , 'xhr-polling'
-        , 'jsonp-polling'
-    ]);
-io.set('origins', 'https://stormy-gorge-77177.herokuapp.com/:*');
-});
 
 
 
