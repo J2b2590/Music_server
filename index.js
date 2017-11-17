@@ -9,11 +9,26 @@ const port = process.env.PORT || 8080;
 app.set('port', port)
 
 const server = http.createServer(app)
-const io = require('socket.io').listen(server)
+const io = require('socket.io').listen(server, {origins: allowedOrigins})
 server.listen(port)
 
+io.configure('production', function(){
+    console.log("Server in production mode");
+    io.enable('browser client minification');  // send minified client
+    io.enable('browser client etag'); // apply etag caching logic based on version number
+    io.enable('browser client gzip'); // the file
+    io.set('log level', 1);           // logging
+    io.set('transports', [            // all transports (optional if you want flashsocket)
+        'websocket'
+        , 'flashsocket'
+        , 'htmlfile'
+        , 'xhr-polling'
+        , 'jsonp-polling'
+    ]);
+io.set('origins', 'https://stormy-gorge-77177.herokuapp.com/:*');
+});
 
-const sio_server = io(server, {origins: allowedOrigins})
+
 
 const users = [] // { username: 'Bob123', currentRoom: "Metal"}
 const rooms = [
