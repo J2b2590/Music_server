@@ -9,9 +9,11 @@ const port = process.env.PORT || 8080;
 app.set('port', port)
 
 const server = http.createServer(app)
-const io = require('socket.io').listen(server, {origins:allowedOrigins})
+const io = require('socket.io').listen(server)
 server.listen(port)
 
+
+const sio_server = io(server, {origins: allowedOrigins})
 
 const users = [] // { username: 'Bob123', currentRoom: "Metal"}
 const rooms = [
