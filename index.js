@@ -12,6 +12,11 @@ var corsOptions = {
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
 }
 
+var corsOptions = {
+  origin: 'https://stormy-gorge-77177.herokuapp.com/:*',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
+app.use(cors(corsOptions))
 
 const port = process.env.PORT || 8080;
 app.set('port', port)
@@ -21,9 +26,6 @@ const io = require('socket.io')({
   transports  : [ 'websocket' ]
 }).listen(server, {origins: allowedOrigins})
 server.listen(port)
-
-
-
 
 const users = [] // { username: 'Bob123', currentRoom: "Metal"}
 const rooms = [
