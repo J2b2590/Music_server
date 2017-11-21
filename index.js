@@ -1,19 +1,22 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-var allowedOrigins = "https://stormy-gorge-77177.herokuapp.com/:*";
+const cors = require('cors')
 
-
+var corsOptions = {
+  origin: 'https://stormy-gorge-77177.herokuapp.com/:*',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
+app.use(cors(corsOptions))
 
 const port = process.env.PORT || 8080;
 app.set('port', port)
 
 const server = http.createServer(app)
-const io = require('socket.io').listen(server)
+const io = require('socket.io')({
+  transports  : [ 'websocket' ]
+}).listen(server)
 server.listen(port)
-
-
-const sio_server = io(server, {origins: allowedOrigins})
 
 const users = [] // { username: 'Bob123', currentRoom: "Metal"}
 const rooms = [
